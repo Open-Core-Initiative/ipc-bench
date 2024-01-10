@@ -52,7 +52,9 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	double sigma = bench->squared_sum / args->count;
 	sigma = sqrt(sigma - (average * average));
 
-	unsigned long long int messageRate = (unsigned long long int)(((args->count * args->size) * 8) / (total_time / 1e9));
+	unsigned long long int messageRate = (unsigned long long int)(((args->count * args->size) * 8) / (total_time / 1000000000));
+
+	printf("messageRate %llu\n", messageRate);
 
 	printf("\n============ RESULTS ================\n");
 	printf("Message size:       %d\n", args->size);
