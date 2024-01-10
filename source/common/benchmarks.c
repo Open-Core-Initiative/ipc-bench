@@ -52,7 +52,7 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	sigma = sqrt(sigma - (average * average));
 
 	long int sizeDiff = (int)( 1024 / args->size);
-	double messageRate = (int)(args->count / (total_time / 1e9));
+	double messageRate = (int)(args->count * args->size / (total_time / 1e9));
 
 	printf("\n============ RESULTS ================\n");
 	printf("Message size:       %d\n", args->size);
