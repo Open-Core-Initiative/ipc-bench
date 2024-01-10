@@ -60,6 +60,7 @@ Clone the project:
 
 ```shell
 git clone https://github.com/Open-Core-Initiative/tunbench.git
+cd tunbench/
 ```
 
 You can build the project and all necessary executables using CMake. The following commands (executed from the root folder) should do the trick:
