@@ -48,6 +48,16 @@ This should configure two tunnels, you can check by running:
 ifconfig -a
 ```
 
+In two separate terminal windows, run the tcpdump commands to see the packets
+
+```shell
+sudo tcpdump -n -vvvv  -e -i tun0
+```
+
+```shell
+sudo tcpdump -n -vvvv  -e -i tun1
+```
+
 ### Running the benchmarks
 
 Install some required packages on Ubuntu:
