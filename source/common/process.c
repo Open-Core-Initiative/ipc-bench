@@ -18,14 +18,14 @@ char *find_build_path() {
 
 	strcpy(path, __FILE__);
 	right = path + strlen(__FILE__);
-	left = right - strlen("ipc-bench");
+	left = right - strlen("tunbench");
 
 	// Make the string-comparison expected O(N)
 	// by only doing a string-comparison when
 	// the first and last character match
 	for (--right; left >= path; --left, --right) {
 		if (*left == 'i' && *right == 'h') {
-			if (strncmp("ipc-bench", left, 9) == 0) {
+			if (strncmp("tunbench", left, 9) == 0) {
 				break;
 			}
 		}
