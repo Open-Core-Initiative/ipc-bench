@@ -17,5 +17,5 @@ set(IPC_BENCH_COMMON_SOURCES
 ## TARGETS
 ###########################################################
 
-add_library(tunbench-common STATIC ${IPC_BENCH_COMMON_SOURCES})
-target_compile_options(tunbench-common PUBLIC -fPIC)
+add_library(ipc-bench-common STATIC ${IPC_BENCH_COMMON_SOURCES})
+target_compile_options(ipc-bench-common PUBLIC -fPIC)
