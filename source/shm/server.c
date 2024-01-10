@@ -72,7 +72,6 @@ void communicate(int descriptor,
 		conn->ack = ntohl(tcp->seq) + 1;
 
 		send_tcp_packet(conn, TCP_ACK);
-		send_tcp_packet(conn, TCP_SYN);
 		conn->state = TCP_ESTABLISHED;
 
 		shm_notify(guard);
@@ -84,9 +83,6 @@ void communicate(int descriptor,
 
 		shm_notify(guard);
 		shm_wait(guard);
-
-		send_tcp_packet(conn, TCP_ACK);
-		send_tcp_packet(conn, TCP_FIN);
 		conn->state = TCP_CLOSED;
 
 		benchmark(&bench);
