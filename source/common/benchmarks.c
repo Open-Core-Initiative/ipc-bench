@@ -55,6 +55,7 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	double tt = total_time/1000000000;
 	double messageRate = (double)(((args->count * args->size) * 8) / tt);
 
+	printf("messageRate  %.7f\n", tt);
 	printf("messageRate  %.7f\n", messageRate);
 
 	printf("\n============ RESULTS ================\n");
