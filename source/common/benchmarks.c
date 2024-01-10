@@ -51,7 +51,6 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	double sigma = bench->squared_sum / args->count;
 	sigma = sqrt(sigma - (average * average));
 
-	long int sizeDiff = (int)( 1024 / args->size);
 	double messageRate = (int)((args->count * args->size) * 8 / (total_time / 1e9));
 
 	printf("\n============ RESULTS ================\n");
