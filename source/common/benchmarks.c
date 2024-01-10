@@ -46,7 +46,7 @@ void benchmark(Benchmarks* bench) {
 void evaluate(Benchmarks* bench, Arguments* args) {
 	assert(args->count > 0);
 	const bench_t total_time = now() - bench->total_start;
-	printf("Total time %.7f\n", total_time);
+	printf("Total time %llu\n", total_time);
 	const double average = ((double)bench->sum) / args->count;
 
 	double sigma = bench->squared_sum / args->count;
