@@ -56,7 +56,7 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	const unsigned long long argsTT = (((args->count * args->size) * 8));
 	const double messageRate = (argsTT / (double)tt);
 
-	printf("args %li\n", argsTT);
+	printf("args %llu\n", argsTT);
 	printf("tt  %.7f\n", tt);
 	printf("messageRate  %.7f\n", messageRate);
 
