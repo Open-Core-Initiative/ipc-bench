@@ -53,7 +53,7 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	sigma = sqrt(sigma - (average * average));
 
 	const double tt = ((double)total_time/1000000000);
-	const unsigned long long argsTT = (((args->count * args->size) * 8));
+	const unsigned long long argsTT = ((args->count * args->size) * 8);
 	const double messageRate = (argsTT / (double)tt);
 
 	printf("args %llu\n", argsTT);

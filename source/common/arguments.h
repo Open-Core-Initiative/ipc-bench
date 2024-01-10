@@ -7,8 +7,7 @@ void print_usage();
 
 typedef struct Arguments {
 	int size;
-	int count;
-
+	unsigned long long count;
 } Arguments;
 
 void parse_arguments(Arguments* arguments, int argc, char* argv[]);
