@@ -52,7 +52,8 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	double sigma = bench->squared_sum / args->count;
 	sigma = sqrt(sigma - (average * average));
 
-	double messageRate = (double)(((args->count * args->size) * 8) / (total_time / 1000000000));
+	double tt = total_time/1000000000;
+	double messageRate = (double)(((args->count * args->size) * 8) / tt);
 
 	printf("messageRate  %.7f\n", messageRate);
 
