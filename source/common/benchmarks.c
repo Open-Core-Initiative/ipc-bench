@@ -46,32 +46,32 @@ void benchmark(Benchmarks* bench) {
 void evaluate(Benchmarks* bench, Arguments* args) {
 	assert(args->count > 0);
 	const bench_t total_time = now() - bench->total_start;
-	printf("Total time %llu\n", total_time);
+	printf("Total time %.7llu\n", total_time);
 	const double average = ((double)bench->sum) / args->count;
 
 	double sigma = bench->squared_sum / args->count;
 	sigma = sqrt(sigma - (average * average));
 
-	unsigned long long int messageRate = (unsigned long long int)(((args->count * args->size) * 8) / (total_time / 1000000000));
+	double messageRate = (double)(((args->count * args->size) * 8) / (total_time / 1000000000));
 
-	printf("messageRate %llu\n", messageRate);
+	printf("messageRate  %.7f\n", messageRate);
 
 	printf("\n============ RESULTS ================\n");
 	printf("Message size:       %d\n", args->size);
 	printf("Message count:      %d\n", args->count);
-	printf("Total duration:     %llu\tms\n", total_time / 1000000);
+	printf("Total duration:     %.7f\tms\n", total_time / 1000000);
 	printf("Average duration:   %.3f\tus\n", average / 1000.0);
 	printf("Minimum duration:   %.3f\tus\n", bench->minimum / 1000.0);
 	printf("Maximum duration:   %.3f\tus\n", bench->maximum / 1000.0);
 	printf("Standard deviation: %.3f\tus\n", sigma / 1000.0);
-	printf("Message rate:       %llu\tbps\n", messageRate);
+	printf("Message rate:        %.7f\tbps\n", messageRate);
 	printf("\n===== TRANSFER RATES (BYTES) ========\n");
-	printf("Transfer rate:       %llu\tKB/s\n", (messageRate / 8) / 1024);
-	printf("Transfer rate:       %llu\tMB/s\n", (messageRate / 8) / 1024 / 1024);
-	printf("Transfer rate:       %llu\tGB/s\n", (messageRate / 8) / 1024 / 1024 / 1024);
+	printf("Transfer rate:        %.7f\tKB/s\n", (messageRate / 8) / 1024);
+	printf("Transfer rate:        %.7f\tMB/s\n", (messageRate / 8) / 1024 / 1024);
+	printf("Transfer rate:        %.7f\tGB/s\n", (messageRate / 8) / 1024 / 1024 / 1024);
 	printf("\n===== TRANSFER RATES (BITS) ========\n");
-	printf("Transfer rate:       %llu\tKb/s\n", messageRate / 1024);
-	printf("Transfer rate:       %llu\tMb/s\n", messageRate / 1024 / 1024);
-	printf("Transfer rate:       %llu\tGb/s\n", messageRate / 1024 / 1024 / 1024);
+	printf("Transfer rate:        %.7f\tKb/s\n", messageRate / 1024);
+	printf("Transfer rate:        %.7f\tMb/s\n", messageRate / 1024 / 1024);
+	printf("Transfer rate:       %.7f\tGb/s\n", messageRate / 1024 / 1024 / 1024);
 	printf("=====================================\n");
 }
