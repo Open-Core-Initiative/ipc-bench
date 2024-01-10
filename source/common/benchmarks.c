@@ -46,7 +46,7 @@ void benchmark(Benchmarks* bench) {
 void evaluate(Benchmarks* bench, Arguments* args) {
 	assert(args->count > 0);
 	const bench_t total_time = now() - bench->total_start;
-	printf("Total time %.7llu\n", total_time);
+	printf("Total time %llu\n", total_time);
 	const double average = ((double)bench->sum) / args->count;
 
 	double sigma = bench->squared_sum / args->count;
@@ -59,7 +59,7 @@ void evaluate(Benchmarks* bench, Arguments* args) {
 	printf("\n============ RESULTS ================\n");
 	printf("Message size:       %d\n", args->size);
 	printf("Message count:      %d\n", args->count);
-	printf("Total duration:     %.7f\tms\n", total_time / 1000000);
+	printf("Total duration:     %llu\tms\n", total_time / 1000000);
 	printf("Average duration:   %.3f\tus\n", average / 1000.0);
 	printf("Minimum duration:   %.3f\tus\n", bench->minimum / 1000.0);
 	printf("Maximum duration:   %.3f\tus\n", bench->maximum / 1000.0);
