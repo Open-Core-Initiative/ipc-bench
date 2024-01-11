@@ -95,15 +95,14 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		// read(descriptor, shm_buffer, sizeof(shm_buffer));
-		// memcpy(shared_memory + 1, buffer, args->size);
-
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + args->size;
 		send_tcp_packet(conn, TCP_ACK);
+
+		memcpy(shared_memory + 1, buffer, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
