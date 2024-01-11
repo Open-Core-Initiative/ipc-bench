@@ -100,9 +100,9 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		tcplen = ipdlen(ip);
-		printf("tcplen3 %d\n", tcplen);
+		printf("ip->len3 %d\n", ip->len);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + tcplen;
+		conn->ack = ntohl(tcp->ack) + ntohl(ip->len);
 
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_CLOSED;
