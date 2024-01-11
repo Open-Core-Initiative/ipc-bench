@@ -83,12 +83,13 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
-		tcplen = ipdlen(ip);
-		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + tcplen;
+		// read(descriptor, buffer, sizeof(buffer));
+		// ip = buf2ip(buffer);
+		// tcp = buf2tcp(buffer, ip);
+		// tcplen = ipdlen(ip);
+		// printf("tcplen3 %d\n", tcplen);
+		// conn->seq = ntohl(tcp->ack);
+		// conn->ack = ntohl(tcp->ack) + tcplen;
 
 		send_tcp_packet(conn, TCP_FIN);
 
@@ -99,6 +100,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		tcplen = ipdlen(ip);
+		printf("tcplen3 %d\n", tcplen);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + tcplen;
 

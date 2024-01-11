@@ -90,6 +90,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		tcplen = ipdlen(ip);
+		printf("tcplen %d\n", tcplen);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + tcplen;
 		send_tcp_packet(conn, TCP_ACK);
@@ -101,6 +102,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		tcplen = ipdlen(ip);
+		printf("tcplen2 %d\n", tcplen);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + tcplen;
 
