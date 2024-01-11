@@ -85,7 +85,9 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		send_tcp_packet_data(conn, TCP_PSH, args->size);
+		uint8_t psh_ack_flag = 0;
+		psh_ack_flag |= TCP_PSH | TCP_ACK;
+		send_tcp_packet_data(conn, psh_ack_flag, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
@@ -94,9 +96,10 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 
-		if(conn->ack == 1 && conn->seq == 1){
-			conn->seq = args -> size + 1;
-			conn->ack = args -> size + 1;
+		if (conn->ack == 1 && conn->seq == 1)
+		{
+			conn->seq = args->size + 1;
+			conn->ack = args->size + 1;
 		}
 
 		conn->seq = conn->ack;
@@ -159,7 +162,6 @@ int main(int argc, char *argv[])
 	TCPConnection(tun, "192.0.2.2", "192.0.3.2", 80, &conn);
 
 	communicate(tun, shared_memory, &args, &conn);
-
 
 	cleanup(shared_memory);
 
