@@ -109,11 +109,6 @@ void communicate(int descriptor,
 		// printf("SERVER E3");
 	}
 
-	printf("SERVER E4");
-
-	shm_notify(guard);
-	shm_wait(guard);
-
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
@@ -126,8 +121,6 @@ void communicate(int descriptor,
 	fin_ack_flag |= TCP_FIN | TCP_ACK;
 	send_tcp_packet(conn, fin_ack_flag);
 	conn->state = TCP_CLOSED;
-
-	shm_notify(guard);
 
 	evaluate(&bench, args);
 	cleanup_tcp(descriptor, shm_buffer);

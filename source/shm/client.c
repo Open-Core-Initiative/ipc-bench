@@ -102,10 +102,6 @@ void communicate(int descriptor,
 		// printf("CLIENT E4");
 	}
 
-	printf("CLIENT E5");
-
-	shm_wait(guard);
-
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
@@ -115,9 +111,6 @@ void communicate(int descriptor,
 	uint8_t fin_ack_flag = 0;
 	fin_ack_flag |= TCP_FIN | TCP_ACK;
 	send_tcp_packet(conn, fin_ack_flag);
-
-	shm_notify(guard);
-	shm_wait(guard);
 
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
