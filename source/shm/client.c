@@ -75,6 +75,12 @@ void communicate(int descriptor,
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_ESTABLISHED;
 
+		read(descriptor, buffer, sizeof(buffer));
+		ip = buf2ip(buffer);
+		tcp = buf2tcp(buffer, ip);
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->seq) + args->size;
+
 		uint8_t psh_ack_flag = 0;
 		psh_ack_flag |= TCP_PSH | TCP_ACK;
 		send_tcp_packet_data(conn, psh_ack_flag, args->size);
@@ -84,16 +90,16 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
-		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->seq) + args->size;
+		// read(descriptor, buffer, sizeof(buffer));
+		// ip = buf2ip(buffer);
+		// tcp = buf2tcp(buffer, ip);
+		// conn->seq = ntohl(tcp->ack);
+		// conn->ack = ntohl(tcp->seq) + args->size;
 
-		send_tcp_packet_data(conn, TCP_ACK, args->size);
+		// send_tcp_packet_data(conn, TCP_ACK, args->size);
 
-		shm_notify(guard);
-		shm_wait(guard);
+		// shm_notify(guard);
+		// shm_wait(guard);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
