@@ -95,8 +95,8 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		read(descriptor, shm_buffer, sizeof(shm_buffer));
-		memcpy(shared_memory + 1, buffer, args->size);
+		// read(descriptor, shm_buffer, sizeof(shm_buffer));
+		// memcpy(shared_memory + 1, buffer, args->size);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
