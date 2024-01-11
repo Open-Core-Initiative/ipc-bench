@@ -100,8 +100,19 @@ void communicate(int descriptor,
 		// send_tcp_packet(conn, TCP_ACK);
 		// conn->state = TCP_ESTABLISHED;
 
-		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->seq) + args->size;
+		if (ntohl(tcp->ack) == 1 && ntohl(tcp->seq) == 1)
+		{
+			conn->seq = ntohl(tcp->seq);
+			conn->ack = ntohl(tcp->ack);
+		}
+		else
+		{
+			read(descriptor, buffer, sizeof(buffer));
+			ip = buf2ip(buffer);
+			tcp = buf2tcp(buffer, ip);
+			conn->seq = ntohl(tcp->ack);
+			conn->ack = ntohl(tcp->seq) + args->size;
+		}
 
 		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
