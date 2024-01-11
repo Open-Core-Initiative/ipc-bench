@@ -67,6 +67,7 @@ void communicate(int descriptor,
 
 		struct ipv4* ip;
 		struct tcp* tcp;
+		int tcplen;
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -88,7 +89,7 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		int tcplen = ipdlen(ip);
+		tcplen = ipdlen(ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + tcplen;
 		send_tcp_packet(conn, TCP_ACK);
@@ -99,7 +100,7 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		int tcplen = ipdlen(ip);
+		tcplen = ipdlen(ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + tcplen;
 
