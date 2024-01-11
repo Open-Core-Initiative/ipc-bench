@@ -86,11 +86,13 @@ void communicate(int descriptor,
 
 	for (message = 0; message < args->count; ++message)
 	{
+		printf("SERVER E1");
 		bench.single_start = now();
 		memset(shared_memory + 1, '*', args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
+		printf("SERVER E2");
 
 		read(descriptor, shm_buffer, sizeof(shm_buffer));
 		memcpy(shared_memory + 1, buffer, args->size);
@@ -104,9 +106,12 @@ void communicate(int descriptor,
 
 		shm_notify(guard);
 		shm_wait(guard);
+		printf("SERVER E3");
 
 		benchmark(&bench);
 	}
+
+	printf("SERVER E4");
 
 	shm_notify(guard);
 	shm_wait(guard);
