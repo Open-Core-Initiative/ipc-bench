@@ -103,7 +103,10 @@ void communicate(int descriptor,
 		conn->seq = conn->ack;
 		conn->ack = conn->seq + args->size;
 
-		send_tcp_packet(conn, TCP_ACK);
+		uint8_t psh_ack_flag = 0;
+		psh_ack_flag |= TCP_PSH | TCP_ACK;
+
+		send_tcp_packet(conn, psh_ack_flag);
 
 		// memcpy(shared_memory + 1, buffer, args->size);
 
