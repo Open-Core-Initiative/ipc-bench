@@ -114,7 +114,10 @@ void communicate(int descriptor,
 		conn->ack = ntohl(tcp->ack) + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
-		send_tcp_packet(conn, TCP_FIN);
+
+		uint8_t fin_ack_flag = 0;
+		fin_ack_flag |= TCP_FIN | TCP_ACK;
+		send_tcp_packet(conn, fin_ack_flag);
 		conn->state = TCP_CLOSED;
 
 		shm_notify(guard);

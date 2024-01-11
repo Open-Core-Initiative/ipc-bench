@@ -75,7 +75,9 @@ void communicate(int descriptor,
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_ESTABLISHED;
 
-		send_tcp_packet_data(conn, TCP_ACK, args->size);
+		uint8_t psh_ack_flag = 0;
+		psh_ack_flag |= TCP_PSH | TCP_ACK;
+		send_tcp_packet_data(conn, psh_ack_flag, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
@@ -88,7 +90,7 @@ void communicate(int descriptor,
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + args->size;
 
-		send_tcp_packet_data(conn, TCP_ACK, args->size);
+		send_tcp_packet_data(conn, psh_ack_flag, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
@@ -99,7 +101,9 @@ void communicate(int descriptor,
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + args->size;
 
-		send_tcp_packet(conn, TCP_FIN);
+		uint8_t fin_ack_flag = 0;
+		fin_ack_flag |= TCP_FIN | TCP_ACK;
+		send_tcp_packet(conn, fin_ack_flag);
 
 		shm_notify(guard);
 		shm_wait(guard);
