@@ -58,6 +58,7 @@ void communicate(int descriptor,
 
 	// Wait for signal from client
 	shm_wait(guard);
+	setup_benchmarks(&bench);
 
 	conn->state = TCP_LISTEN;
 
@@ -82,8 +83,6 @@ void communicate(int descriptor,
 
 	shm_notify(guard);
 	shm_wait(guard);
-
-	setup_benchmarks(&bench);
 
 	for (message = 0; message < args->count; ++message)
 	{
