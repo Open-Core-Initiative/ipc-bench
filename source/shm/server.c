@@ -108,6 +108,8 @@ void communicate(int descriptor,
 		shm_wait(guard);
 
 		benchmark(&bench);
+
+		shm_notify(guard);
 	}
 
 	// shm_notify(guard);
