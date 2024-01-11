@@ -100,7 +100,7 @@ void communicate(int descriptor,
 		// send_tcp_packet(conn, TCP_ACK);
 		// conn->state = TCP_ESTABLISHED;
 
-		if (ntohl(tcp->ack) == 1 && ntohl(tcp->seq) == 1)
+		if (tcp->ack == 1 && tcp->seq == 1)
 		{
 			conn->seq = ntohl(tcp->seq);
 			conn->ack = ntohl(tcp->ack);
