@@ -93,6 +93,12 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
+
+		if(conn->ack == 1 && conn->seq == 1){
+			conn->seq = args -> size + 1;
+			conn->ack = args -> size + 1;
+		}
+
 		conn->seq = conn->ack;
 		conn->ack = conn->seq + args->size;
 
