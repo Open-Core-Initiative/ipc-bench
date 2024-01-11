@@ -85,7 +85,7 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		send_tcp_packet_data(conn, TCP_ACK, args->size);
+		send_tcp_packet_data(conn, TCP_PSH, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
