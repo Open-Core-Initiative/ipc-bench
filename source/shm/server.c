@@ -97,7 +97,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->seq) + 1;
+		conn->ack = ntohl(tcp->seq) + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
 
