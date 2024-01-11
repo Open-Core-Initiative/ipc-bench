@@ -103,10 +103,13 @@ void communicate(int descriptor,
 		// conn->seq = ntohl(tcp->ack);
 		// conn->ack = ntohl(tcp->seq) + args->size;
 
-		if(pre_seq == 1 && pre_ack == 1){
+		if (pre_seq == 1 && pre_ack == 1)
+		{
 			conn->seq = ntohl(tcp->ack);
 			conn->ack = ntohl(tcp->seq) + args->size;
-		} else if (pre_seq == ntohl(tcp->ack) && pre_ack == ntohl(tcp->seq) + args->size) {
+		}
+		else if (pre_seq == ntohl(tcp->ack) && pre_ack == ntohl(tcp->seq) + args->size)
+		{
 			conn->seq = pre_ack;
 			conn->ack = pre_seq + args->size;
 		}

@@ -79,6 +79,9 @@ void communicate(int descriptor,
 	shm_notify(guard);
 	shm_wait(guard);
 
+	int pre_ack = 1;
+	int pre_seq = 1;
+
 	for (; args->count > 0; --args->count)
 	{
 		shm_wait(guard);
@@ -93,8 +96,17 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->seq) + args->size;
+
+		if (pre_seq == 1 && pre_ack == 1)
+		{
+			conn->seq = ntohl(tcp->ack);
+			conn->ack = ntohl(tcp->seq) + args->size;
+		}
+		else if (pre_seq == ntohl(tcp->ack) && pre_ack == ntohl(tcp->seq) + args->size)
+		{
+			conn->seq = pre_ack;
+			conn->ack = pre_seq + args->size;
+		}
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
@@ -153,7 +165,6 @@ int main(int argc, char *argv[])
 	TCPConnection(tun, "192.0.2.2", "192.0.3.2", 80, &conn);
 
 	communicate(tun, shared_memory, &args, &conn);
-
 
 	cleanup(shared_memory);
 
