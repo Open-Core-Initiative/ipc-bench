@@ -84,6 +84,9 @@ void communicate(int descriptor,
 	shm_notify(guard);
 	shm_wait(guard);
 
+	int pre_ack = 1;
+	int pre_seq = 1;
+
 	for (message = 0; message < args->count; ++message)
 	{
 		bench.single_start = now();
@@ -93,15 +96,30 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		send_tcp_packet(conn, TCP_ACK);
-
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->seq) + args->size;
 
-		memcpy(shared_memory + 1, buffer, args->size);
+		// conn->seq = ntohl(tcp->ack);
+		// conn->ack = ntohl(tcp->seq) + args->size;
+
+		if(pre_seq == 1 && pre_ack == 1){
+			conn->seq = ntohl(tcp->ack);
+			conn->ack = ntohl(tcp->seq) + args->size;
+		} else if (pre_seq == ntohl(tcp->ack) && pre_ack == ntohl(tcp->seq) + args->size) {
+			read(descriptor, buffer, sizeof(buffer));
+			ip = buf2ip(buffer);
+			tcp = buf2tcp(buffer, ip);
+			conn->seq = ntohl(tcp->ack);
+			conn->ack = ntohl(tcp->seq) + args->size;
+		}
+
+		send_tcp_packet(conn, TCP_ACK);
+
+		pre_seq = conn->seq;
+		pre_ack = conn->ack;
+
+		// memcpy(shared_memory + 1, buffer, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
