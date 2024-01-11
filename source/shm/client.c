@@ -80,17 +80,15 @@ void communicate(int descriptor,
 
 	for (; args->count > 0; --args->count)
 	{
-		printf("CLIENT E1");
-		shm_wait(guard);
-		printf("CLIENT E2");
+		// shm_wait(guard);
 
-		memcpy(shm_buffer, shared_memory + 1, args->size);
+		// memcpy(shm_buffer, shared_memory + 1, args->size);
+
+		// send_tcp_packet_data(conn, TCP_ACK, args->size);
+		// shm_notify(guard);
+		// shm_wait(guard);
 
 		send_tcp_packet_data(conn, TCP_ACK, args->size);
-
-		shm_notify(guard);
-		shm_wait(guard);
-		printf("CLIENT E3");
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -98,10 +96,10 @@ void communicate(int descriptor,
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + args->size;
 
-		memcpy(shm_buffer, shared_memory + 1, args->size);
+		// memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		shm_notify(guard);
-		printf("CLIENT E4");
+		// shm_notify(guard);
+		// printf("CLIENT E4");
 	}
 
 	printf("CLIENT E5");

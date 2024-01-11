@@ -86,16 +86,7 @@ void communicate(int descriptor,
 
 	for (message = 0; message < args->count; ++message)
 	{
-		printf("SERVER E1");
 		bench.single_start = now();
-		memset(shared_memory + 1, '*', args->size);
-
-		shm_notify(guard);
-		shm_wait(guard);
-		printf("SERVER E2");
-
-		read(descriptor, shm_buffer, sizeof(shm_buffer));
-		memcpy(shared_memory + 1, buffer, args->size);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -104,11 +95,18 @@ void communicate(int descriptor,
 		conn->ack = ntohl(tcp->seq) + args->size;
 		send_tcp_packet(conn, TCP_ACK);
 
-		shm_notify(guard);
-		shm_wait(guard);
-		printf("SERVER E3");
-
 		benchmark(&bench);
+		// memset(shared_memory + 1, '*', args->size);
+
+		// shm_notify(guard);
+		// shm_wait(guard);
+
+		// read(descriptor, shm_buffer, sizeof(shm_buffer));
+		// memcpy(shared_memory + 1, buffer, args->size);
+
+		// shm_notify(guard);
+		// shm_wait(guard);
+		// printf("SERVER E3");
 	}
 
 	printf("SERVER E4");
