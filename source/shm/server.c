@@ -99,25 +99,10 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-
-		// conn->seq = ntohl(tcp->ack);
-		// conn->ack = ntohl(tcp->seq) + args->size;
-
-		if (pre_seq == 1 && pre_ack == 1)
-		{
-			conn->seq = ntohl(tcp->ack);
-			conn->ack = ntohl(tcp->seq) + args->size;
-		}
-		else if (pre_seq == ntohl(tcp->ack) && pre_ack == ntohl(tcp->seq) + args->size)
-		{
-			conn->seq = pre_ack;
-			conn->ack = pre_seq + args->size;
-		}
+		conn->seq = conn->ack;
+		conn->ack = conn->seq + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
-
-		pre_seq = conn->seq;
-		pre_ack = conn->ack;
 
 		// memcpy(shared_memory + 1, buffer, args->size);
 
