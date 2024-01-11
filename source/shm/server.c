@@ -88,12 +88,12 @@ void communicate(int descriptor,
 	{
 		bench.single_start = now();
 
-		memset(shared_memory + 1, '*', args->size);
+		// memset(shared_memory + 1, '*', args->size);
 
-		// conn->state = TCP_LISTEN;
+		// // conn->state = TCP_LISTEN;
 
-		shm_notify(guard);
-		shm_wait(guard);
+		// shm_notify(guard);
+		// shm_wait(guard);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -102,14 +102,14 @@ void communicate(int descriptor,
 		conn->ack = ntohl(tcp->seq) + args->size;
 		send_tcp_packet(conn, TCP_ACK);
 
-		memcpy(shared_memory + 1, buffer, args->size);
+		// memcpy(shared_memory + 1, buffer, args->size);
 
-		shm_notify(guard);
-		shm_wait(guard);
+		// shm_notify(guard);
+		// shm_wait(guard);
 
 		benchmark(&bench);
 
-		shm_notify(guard);
+		// shm_notify(guard);
 	}
 
 	// shm_notify(guard);
