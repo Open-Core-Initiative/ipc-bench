@@ -65,7 +65,6 @@ void communicate(int descriptor,
 
 		struct ipv4* ip;
 		struct tcp* tcp;
-		// int tcplen;
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -99,10 +98,8 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		// tcplen = ipdlen(ip);
-		printf("ip->len3 %d\n", ip->len);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + ntohl(ip->len);
+		conn->ack = ntohl(tcp->ack) + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_CLOSED;
