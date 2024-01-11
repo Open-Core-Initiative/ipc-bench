@@ -75,9 +75,6 @@ void communicate(int descriptor,
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_ESTABLISHED;
 
-		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + args->size;
 
