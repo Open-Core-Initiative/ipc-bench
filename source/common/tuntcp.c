@@ -74,7 +74,7 @@ void TCPConnection(
 	conn->dst_addr = daddr;
 	conn->dst_port = port;
 
-	conn->seq = rand();
+	conn->seq = 0;
 	conn->ack = 0;
 }
 

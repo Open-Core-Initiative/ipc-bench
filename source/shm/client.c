@@ -76,7 +76,7 @@ void communicate(int descriptor,
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_ESTABLISHED;
 
-		send_tcp_packet_data(conn, TCP_PSH, args->size);
+		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
