@@ -90,16 +90,16 @@ void communicate(int descriptor,
 
 		memset(shared_memory + 1, '*', args->size);
 
+		shm_notify(guard);
+		shm_wait(guard);
+
+		send_tcp_packet(conn, TCP_ACK);
+
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + args->size;
-
-		shm_notify(guard);
-		shm_wait(guard);
-
-		send_tcp_packet(conn, TCP_ACK);
 
 		memcpy(shared_memory + 1, buffer, args->size);
 
