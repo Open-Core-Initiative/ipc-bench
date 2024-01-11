@@ -87,32 +87,10 @@ void communicate(int descriptor,
 	for (message = 0; message < args->count; ++message)
 	{
 		bench.single_start = now();
-
 		memset(shared_memory + 1, '*', args->size);
-
-		// conn->state = TCP_LISTEN;
 
 		shm_notify(guard);
 		shm_wait(guard);
-
-		// struct ipv4 *ip;
-		// struct tcp *tcp;
-
-		// read(descriptor, buffer, sizeof(buffer));
-		// ip = buf2ip(buffer);
-		// tcp = buf2tcp(buffer, ip);
-		// conn->state = TCP_SYN_RECEIVED;
-		// conn->seq = ntohl(tcp->ack);
-		// conn->ack = ntohl(tcp->seq) + 1;
-
-		// uint8_t syn_ack_flag = 0;
-		// syn_ack_flag |= TCP_SYN | TCP_ACK;
-
-		// send_tcp_packet(conn, syn_ack_flag);
-		// conn->state = TCP_ESTABLISHED;
-
-		// shm_notify(guard);
-		// shm_wait(guard);
 
 		read(descriptor, shm_buffer, sizeof(shm_buffer));
 		memcpy(shared_memory + 1, buffer, args->size);
@@ -127,25 +105,10 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		// read(descriptor, buffer, sizeof(buffer));
-		// ip = buf2ip(buffer);
-		// tcp = buf2tcp(buffer, ip);
-		// conn->seq = ntohl(tcp->ack);
-		// conn->ack = ntohl(tcp->seq) + 1;
-
-		// send_tcp_packet(conn, TCP_ACK);
-
-		// uint8_t fin_ack_flag = 0;
-		// fin_ack_flag |= TCP_FIN | TCP_ACK;
-		// send_tcp_packet(conn, fin_ack_flag);
-		// conn->state = TCP_CLOSED;
-
-		// shm_notify(guard);
-		// shm_wait(guard);
-
 		benchmark(&bench);
 	}
 
+	shm_notify(guard);
 	shm_wait(guard);
 
 	read(descriptor, buffer, sizeof(buffer));
