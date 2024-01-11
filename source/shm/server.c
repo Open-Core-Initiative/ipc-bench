@@ -100,6 +100,16 @@ void communicate(int descriptor,
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->ack) + args->size;
+		send_tcp_packet(conn, TCP_ACK);
+
+		shm_notify(guard);
+		shm_wait(guard);
+
+		read(descriptor, buffer, sizeof(buffer));
+		ip = buf2ip(buffer);
+		tcp = buf2tcp(buffer, ip);
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->ack) + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
 		send_tcp_packet(conn, TCP_FIN);
