@@ -67,7 +67,7 @@ void communicate(int descriptor,
 
 		struct ipv4* ip;
 		struct tcp* tcp;
-		int tcplen;
+		// int tcplen;
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
