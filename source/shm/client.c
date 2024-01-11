@@ -90,12 +90,17 @@ void communicate(int descriptor,
 
 		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
+		pre_seq = conn->seq;
+		pre_ack = conn->ack;
+
 		shm_notify(guard);
 		shm_wait(guard);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
+		// conn->seq = ntohl(tcp->ack);
+		// conn->ack = ntohl(tcp->seq) + args->size;
 
 		if (pre_seq == 1 && pre_ack == 1)
 		{
@@ -165,6 +170,7 @@ int main(int argc, char *argv[])
 	TCPConnection(tun, "192.0.2.2", "192.0.3.2", 80, &conn);
 
 	communicate(tun, shared_memory, &args, &conn);
+
 
 	cleanup(shared_memory);
 
