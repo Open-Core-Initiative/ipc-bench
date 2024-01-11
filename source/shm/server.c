@@ -84,9 +84,6 @@ void communicate(int descriptor,
 	shm_notify(guard);
 	shm_wait(guard);
 
-	int pre_ack = 1;
-	int pre_seq = 1;
-
 	for (message = 0; message < args->count; ++message)
 	{
 		bench.single_start = now();
