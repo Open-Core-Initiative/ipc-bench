@@ -76,6 +76,8 @@ void communicate(int descriptor,
 	send_tcp_packet(conn, TCP_ACK);
 	conn->state = TCP_ESTABLISHED;
 
+	shm_notify(guard);
+
 	for (; args->count > 0; --args->count)
 	{
 		shm_wait(guard);
