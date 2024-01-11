@@ -75,8 +75,10 @@ void communicate(int descriptor,
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + 1;
 
-		send_tcp_packet(conn, TCP_SYN);
-		send_tcp_packet(conn, TCP_ACK);
+		uint8_t syn_ack_flag = 0;
+		syn_ack_flag |= TCP_SYN | TCP_ACK;
+
+		send_tcp_packet(conn, syn_ack_flag);
 		conn->state = TCP_ESTABLISHED;
 
 		shm_notify(guard);
