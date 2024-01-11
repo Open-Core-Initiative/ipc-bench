@@ -91,7 +91,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq) + args->size;
 		send_tcp_packet(conn, TCP_ACK);
 
 		shm_notify(guard);
@@ -101,7 +101,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq) + args->size;
 		send_tcp_packet(conn, TCP_ACK);
 
 		shm_notify(guard);
@@ -111,7 +111,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq) + 1;
 
 		send_tcp_packet(conn, TCP_ACK);
 

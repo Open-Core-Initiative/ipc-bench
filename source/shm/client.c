@@ -88,9 +88,9 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq) + args->size;
 
-		send_tcp_packet_data(conn, psh_ack_flag, args->size);
+		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
@@ -99,7 +99,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq);
 
 		uint8_t fin_ack_flag = 0;
 		fin_ack_flag |= TCP_FIN | TCP_ACK;
@@ -112,7 +112,7 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn->seq = ntohl(tcp->ack);
-		conn->ack = ntohl(tcp->ack) + args->size;
+		conn->ack = ntohl(tcp->seq) + 1;
 
 		send_tcp_packet(conn, TCP_ACK);
 		conn->state = TCP_CLOSED;
