@@ -108,6 +108,9 @@ void communicate(int descriptor,
 		send_tcp_packet(conn, TCP_FIN);
 		conn->state = TCP_CLOSED;
 
+		shm_notify(guard);
+		shm_wait(guard);
+
 		benchmark(&bench);
 	}
 
