@@ -70,25 +70,23 @@ void communicate(int descriptor,
 
 		conn.state = TCP_LISTEN;
 
-		if (message != 0)
-		{
-			conn.seq = 0;
-			conn.ack = 0;
-			conn.src_port = conn.src_port + 1;
-		}
-
 		shm_notify(guard);
 		shm_wait(guard);
 
 		struct ipv4 *ip;
 		struct tcp *tcp;
 
+		if (message != 0)
+		{
+			conn.src_port = conn.src_port + 1;
+		}
+
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 		conn.state = TCP_SYN_RECEIVED;
-		conn.seq = ntohl(tcp->ack);
-		conn.ack = ntohl(tcp->seq) + 1;
+		conn.seq = 0;
+		conn.ack = 1;
 
 		uint8_t syn_ack_flag = 0;
 		syn_ack_flag |= TCP_SYN | TCP_ACK;
