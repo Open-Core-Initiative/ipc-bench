@@ -99,8 +99,8 @@ void communicate(int descriptor,
 
 		if (message > 0)
 		{
-			conn1->seq = ntohl(tcp->ack);
-			conn1->ack = ntohl(tcp->seq) + args->size;
+			conn1->seq = conn1->ack;
+			conn1->ack = conn1->seq + args->size;
 		}
 		else
 		{
