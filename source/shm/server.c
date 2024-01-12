@@ -73,8 +73,8 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		struct ipv4 *ip;
-		struct tcp *tcp;
+		// struct ipv4 *ip;
+		// struct tcp *tcp;
 
 		if (message != 0)
 		{
@@ -82,8 +82,8 @@ void communicate(int descriptor,
 		}
 
 		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
+		// ip = buf2ip(buffer);
+		// tcp = buf2tcp(buffer, ip);
 		conn.state = TCP_SYN_RECEIVED;
 		conn.seq = 0;
 		conn.ack = 1;
@@ -101,8 +101,8 @@ void communicate(int descriptor,
 		// memcpy(shared_memory + 1, buffer, args->size);
 
 		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
+		// ip = buf2ip(buffer);
+		// tcp = buf2tcp(buffer, ip);
 		conn.seq = 1;
 		conn.ack = 1 + args->size;
 
@@ -114,8 +114,8 @@ void communicate(int descriptor,
 		shm_wait(guard);
 
 		read(descriptor, buffer, sizeof(buffer));
-		ip = buf2ip(buffer);
-		tcp = buf2tcp(buffer, ip);
+		// ip = buf2ip(buffer);
+		// tcp = buf2tcp(buffer, ip);
 		conn.seq = 1 + args->size;
 		conn.ack = 1 + 1 + args->size;
 
