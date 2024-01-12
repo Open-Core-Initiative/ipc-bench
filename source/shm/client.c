@@ -85,9 +85,9 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		printf("sc_CLI %d\n", args->count);
-		printf("seq_CLI %d-%d\n", conn->seq, args->count);
-		printf("ack_CLI %d-%d\n", conn->ack, args->count);
+		// printf("sc_CLI %d\n", args->count);
+		// printf("seq_CLI %d-%d\n", conn->seq, args->count);
+		// printf("ack_CLI %d-%d\n", conn->ack, args->count);
 
 		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
@@ -107,23 +107,23 @@ void communicate(int descriptor,
 		shm_wait(guard);
 	}
 
-	// uint8_t fin_ack_flag = 0;
-	// fin_ack_flag |= TCP_FIN | TCP_ACK;
-	// send_tcp_packet(conn, fin_ack_flag);
+	uint8_t fin_ack_flag = 0;
+	fin_ack_flag |= TCP_FIN | TCP_ACK;
+	send_tcp_packet(conn, fin_ack_flag);
 
-	// shm_notify(guard);
-	// shm_wait(guard);
+	shm_notify(guard);
+	shm_wait(guard);
 
-	// read(descriptor, buffer, sizeof(buffer));
-	// ip = buf2ip(buffer);
-	// tcp = buf2tcp(buffer, ip);
-	// conn->seq = ntohl(tcp->ack);
-	// conn->ack = ntohl(tcp->seq) + 1;
+	read(descriptor, buffer, sizeof(buffer));
+	ip = buf2ip(buffer);
+	tcp = buf2tcp(buffer, ip);
+	conn->seq = ntohl(tcp->ack);
+	conn->ack = ntohl(tcp->seq) + 1;
 
-	// send_tcp_packet(conn, TCP_ACK);
-	// conn->state = TCP_CLOSED;
+	send_tcp_packet(conn, TCP_ACK);
+	conn->state = TCP_CLOSED;
 
-	// shm_notify(guard);
+	shm_notify(guard);
 
 	cleanup_tcp(descriptor, shm_buffer);
 }

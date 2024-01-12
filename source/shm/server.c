@@ -108,9 +108,9 @@ void communicate(int descriptor,
 			conn1->ack = ntohl(tcp->seq) + args->size;
 		}
 
-		printf("sc_SER %d\n", message);
-		printf("seq_SER %d-%d\n", conn1->seq, message);
-		printf("ack_SER %d-%d\n", conn1->ack, message);
+		// printf("sc_SER %d\n", message);
+		// printf("seq_SER %d-%d\n", conn1->seq, message);
+		// printf("ack_SER %d-%d\n", conn1->ack, message);
 
 		send_tcp_packet(conn1, TCP_ACK);
 
@@ -124,24 +124,23 @@ void communicate(int descriptor,
 		shm_notify(guard);
 	}
 
-	// shm_notify(guard);
-	// shm_wait(guard);
+	shm_wait(guard);
 
-	// read(descriptor, buffer, sizeof(buffer));
-	// ip = buf2ip(buffer);
-	// tcp = buf2tcp(buffer, ip);
-	// conn1->seq = ntohl(tcp->ack);
-	// conn1->ack = ntohl(tcp->seq) + 1;
+	read(descriptor, buffer, sizeof(buffer));
+	ip = buf2ip(buffer);
+	tcp = buf2tcp(buffer, ip);
+	conn1->seq = ntohl(tcp->ack);
+	conn1->ack = ntohl(tcp->seq) + 1;
 
-	// send_tcp_packet(conn1, TCP_ACK);
+	send_tcp_packet(conn1, TCP_ACK);
 
-	// uint8_t fin_ack_flag = 0;
-	// fin_ack_flag |= TCP_FIN | TCP_ACK;
-	// send_tcp_packet(conn1, fin_ack_flag);
-	// conn1->state = TCP_CLOSED;
+	uint8_t fin_ack_flag = 0;
+	fin_ack_flag |= TCP_FIN | TCP_ACK;
+	send_tcp_packet(conn1, fin_ack_flag);
+	conn1->state = TCP_CLOSED;
 
-	// shm_notify(guard);
-	// shm_wait(guard);
+	shm_notify(guard);
+	shm_wait(guard);
 
 	evaluate(&bench, args);
 	cleanup_tcp(descriptor, shm_buffer);
