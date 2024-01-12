@@ -70,6 +70,13 @@ void communicate(int descriptor,
 
 		conn.state = TCP_LISTEN;
 
+		if (message != 0)
+		{
+			conn.seq = 0;
+			conn.ack = 0;
+			conn.src_port = conn.src_port + 1;
+		}
+
 		shm_notify(guard);
 		shm_wait(guard);
 

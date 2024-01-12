@@ -70,7 +70,7 @@ void communicate(int descriptor,
 		{
 			conn.seq = 0;
 			conn.ack = 0;
-			conn.src_port = rand() % INT16_MAX;
+			conn.src_port = conn.src_port + 1;
 		}
 
 		send_tcp_packet(&conn, TCP_SYN);
