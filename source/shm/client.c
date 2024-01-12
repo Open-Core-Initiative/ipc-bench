@@ -58,13 +58,15 @@ void communicate(int descriptor,
 	struct tcp_conn conn;
 	TCPConnection(descriptor, "192.0.2.2", "192.0.3.2", 80, &conn);
 
+	const int setCount = args -> count;
+
 	for (; args->count > 0; --args->count)
 	{
 		shm_wait(guard);
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		if (args->count != args->size)
+		if (args->count != setCount)
 		{
 			conn.seq = 0;
 			conn.ack = 0;
