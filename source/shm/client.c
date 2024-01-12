@@ -100,16 +100,8 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 
-		if (ntohl(tcp->seq) == conn->ack && ntohl(tcp->ack) == conn->seq + args->size)
-		{
-			conn->seq = conn->seq + args->size;
-			conn->ack = conn->ack + args->size;
-		}
-		else
-		{
-			conn->seq = ntohl(tcp->ack);
-			conn->ack = ntohl(tcp->seq) + args->size;
-		}
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->seq) + args->size;
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
