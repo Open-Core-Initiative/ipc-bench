@@ -79,12 +79,7 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		// struct ipv4 *ip;
-		// struct tcp *tcp;
-
 		read(descriptor, buffer, sizeof(buffer));
-		// ip = buf2ip(buffer);
-		// tcp = buf2tcp(buffer, ip);
 		conn.seq = 1;
 		conn.ack = 1;
 
@@ -99,8 +94,6 @@ void communicate(int descriptor,
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
 		read(descriptor, buffer, sizeof(buffer));
-		// ip = buf2ip(buffer);
-		// tcp = buf2tcp(buffer, ip);
 
 		conn.seq = 1 + args->size;
 		conn.ack = 1;
@@ -113,8 +106,6 @@ void communicate(int descriptor,
 		shm_wait(guard);
 
 		read(descriptor, buffer, sizeof(buffer));
-		// ip = buf2ip(buffer);
-		// tcp = buf2tcp(buffer, ip);
 		conn.seq = 1 + 1 + args->size;
 		conn.ack = 1 + 1;
 
