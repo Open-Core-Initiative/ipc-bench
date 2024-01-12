@@ -47,7 +47,7 @@ void shm_notify(atomic_char *guard)
 void communicate(int descriptor,
 				 char *shared_memory,
 				 struct Arguments *args,
-				 struct tcp_conn *conn)
+				 struct tcp_conn *conn1)
 {
 	struct Benchmarks bench;
 	char buffer[1024] = {0};
@@ -60,7 +60,7 @@ void communicate(int descriptor,
 	shm_wait(guard);
 	setup_benchmarks(&bench);
 
-	conn->state = TCP_LISTEN;
+	conn1->state = TCP_LISTEN;
 
 	shm_notify(guard);
 	shm_wait(guard);
@@ -71,15 +71,15 @@ void communicate(int descriptor,
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
-	conn->state = TCP_SYN_RECEIVED;
-	conn->seq = ntohl(tcp->ack);
-	conn->ack = ntohl(tcp->seq) + 1;
+	conn1->state = TCP_SYN_RECEIVED;
+	conn1->seq = ntohl(tcp->ack);
+	conn1->ack = ntohl(tcp->seq) + 1;
 
 	uint8_t syn_ack_flag = 0;
 	syn_ack_flag |= TCP_SYN | TCP_ACK;
 
-	send_tcp_packet(conn, syn_ack_flag);
-	conn->state = TCP_ESTABLISHED;
+	send_tcp_packet(conn1, syn_ack_flag);
+	conn1->state = TCP_ESTABLISHED;
 
 	shm_notify(guard);
 	shm_wait(guard);
@@ -96,16 +96,16 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
-		if(conn->ack == 1 && conn->seq == 0){
-			conn->seq = 1;
-			conn->ack = 1;
+		if(conn1->ack == 1 && conn1->seq == 0){
+			conn1->seq = 1;
+			conn1->ack = 1 + args->size;
 		}
-		conn->seq = conn->ack;
-		conn->ack = conn->seq + args->size;
+		conn1->seq = conn1->ack;
+		conn1->ack = conn1->seq + args->size;
 
-		send_tcp_packet(conn, TCP_ACK);
+		send_tcp_packet(conn1, TCP_ACK);
 
-		// memcpy(shared_memory + 1, buffer, args->size);
+		memcpy(shared_memory + 1, buffer, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
@@ -121,15 +121,15 @@ void communicate(int descriptor,
 	// read(descriptor, buffer, sizeof(buffer));
 	// ip = buf2ip(buffer);
 	// tcp = buf2tcp(buffer, ip);
-	// conn->seq = ntohl(tcp->ack);
-	// conn->ack = ntohl(tcp->seq) + 1;
+	// conn1->seq = ntohl(tcp->ack);
+	// conn1->ack = ntohl(tcp->seq) + 1;
 
-	// send_tcp_packet(conn, TCP_ACK);
+	// send_tcp_packet(conn1, TCP_ACK);
 
 	// uint8_t fin_ack_flag = 0;
 	// fin_ack_flag |= TCP_FIN | TCP_ACK;
-	// send_tcp_packet(conn, fin_ack_flag);
-	// conn->state = TCP_CLOSED;
+	// send_tcp_packet(conn1, fin_ack_flag);
+	// conn1->state = TCP_CLOSED;
 
 	// shm_notify(guard);
 	// shm_wait(guard);
@@ -164,10 +164,10 @@ int main(int argc, char *argv[])
 	}
 
 	int tun = openTun("tun1");
-	struct tcp_conn conn;
-	TCPConnection(tun, "192.0.3.2", "192.0.2.2", 80, &conn);
+	struct tcp_conn conn1;
+	TCPConnection(tun, "192.0.3.2", "192.0.2.2", 80, &conn1);
 
-	communicate(tun, shared_memory, &args, &conn);
+	communicate(tun, shared_memory, &args, &conn1);
 	cleanup(segment_id, shared_memory);
 
 	return EXIT_SUCCESS;
