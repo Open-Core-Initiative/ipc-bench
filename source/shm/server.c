@@ -126,7 +126,6 @@ void communicate(int descriptor,
 		shm_wait(guard);
 
 		benchmark(&bench);
-		TCPConnection(descriptor, "192.0.3.2", "192.0.2.2", 80, &conn);
 	}
 
 	evaluate(&bench, args);

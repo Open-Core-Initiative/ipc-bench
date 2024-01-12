@@ -64,6 +64,13 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
+		if (args->count != args->size)
+		{
+			conn.seq = 0;
+			conn.ack = 0;
+			conn.src_port = rand() % INT16_MAX;
+		}
+
 		send_tcp_packet(&conn, TCP_SYN);
 		conn.state = TCP_SYN_SENT;
 
@@ -113,7 +120,6 @@ void communicate(int descriptor,
 		conn.state = TCP_CLOSED;
 
 		shm_notify(guard);
-		TCPConnection(descriptor, "192.0.2.2", "192.0.3.2", 80, &conn);
 	}
 
 	cleanup_tcp(descriptor, shm_buffer);
