@@ -130,7 +130,7 @@ void communicate(int descriptor,
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
 	conn1->seq = conn1->ack;
-	conn1->ack = conn1->ack + args->size;
+	conn1->ack = conn1->ack + 1;
 
 	send_tcp_packet(conn1, TCP_ACK);
 
