@@ -97,16 +97,16 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 
-		// if (message > 0)
-		// {
-		// 	conn1->seq = ntohl((unsigned long long)conn1->ack);
-		// 	conn1->ack = ntohl(((unsigned long long)conn1->seq + args->size));
-		// }
-		// else
-		// {
-		conn1->seq = ntohl(tcp->ack);
-		conn1->ack = ntohl(tcp->seq) + args->size;
-		// }
+		if (message > 0)
+		{
+			conn1->seq = conn1->ack;
+			conn1->ack = conn1->seq + args->size;
+		}
+		else
+		{
+			conn1->seq = ntohl(tcp->ack);
+			conn1->ack = ntohl(tcp->seq) + args->size;
+		}
 
 		// printf("sc_SER %d\n", message);
 		// printf("seq_SER %d-%d\n", conn1->seq, message);
@@ -129,8 +129,6 @@ void communicate(int descriptor,
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
-	// conn1->seq = ntohl((unsigned long long)conn1->ack);
-	// conn1->ack = ntohl(((unsigned long long)conn1->seq + 1));
 	conn1->seq = ntohl(tcp->ack);
 	conn1->ack = ntohl(tcp->seq) + 1;
 
