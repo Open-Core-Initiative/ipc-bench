@@ -100,7 +100,7 @@ void communicate(int descriptor,
 		if (message > 0)
 		{
 			conn1->seq = conn1->ack;
-			conn1->ack = conn1->seq + args->size + 20;
+			conn1->ack = conn1->seq + 40;
 		}
 		else
 		{
