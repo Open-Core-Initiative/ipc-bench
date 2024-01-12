@@ -89,7 +89,7 @@ void communicate(int descriptor,
 		// printf("seq_CLI %d-%d\n", conn->seq, args->count);
 		// printf("ack_CLI %d-%d\n", conn->ack, args->count);
 
-		send_tcp_packet_data(conn, TCP_PSH, args->size);
+		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
