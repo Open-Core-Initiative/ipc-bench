@@ -116,8 +116,8 @@ void communicate(int descriptor,
 		read(descriptor, buffer, sizeof(buffer));
 		// ip = buf2ip(buffer);
 		// tcp = buf2tcp(buffer, ip);
-		conn.seq = 1 + 1;
-		conn.ack = 1;
+		conn.seq = 1;
+		conn.ack = 1 + 1 + args->size;
 
 		send_tcp_packet(&conn, TCP_ACK);
 
