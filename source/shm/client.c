@@ -56,43 +56,37 @@ void communicate(int descriptor,
 	atomic_init(guard, 's');
 	assert(sizeof(atomic_char) == 1);
 
-	shm_wait(guard);
-
-	send_tcp_packet(conn, TCP_SYN);
-	conn->state = TCP_SYN_SENT;
-
-	shm_notify(guard);
-	shm_wait(guard);
-
-	struct ipv4 *ip;
-	struct tcp *tcp;
-
-	read(descriptor, buffer, sizeof(buffer));
-	ip = buf2ip(buffer);
-	tcp = buf2tcp(buffer, ip);
-	conn->seq = ntohl(tcp->ack);
-	conn->ack = ntohl(tcp->seq) + 1;
-
-	send_tcp_packet(conn, TCP_ACK);
-	conn->state = TCP_ESTABLISHED;
-
-	shm_notify(guard);
-	shm_wait(guard);
-
 	for (; args->count > 0; --args->count)
 	{
 		shm_wait(guard);
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		// printf("sc_CLI %d\n", args->count);
-		// printf("seq_CLI %d-%d\n", conn->seq, args->count);
-		// printf("ack_CLI %d-%d\n", conn->ack, args->count);
+		conn->src_port = rand() % INT16_MAX;
+		send_tcp_packet(conn, TCP_SYN);
+		conn->state = TCP_SYN_SENT;
+
+		shm_notify(guard);
+		shm_wait(guard);
+
+		struct ipv4 *ip;
+		struct tcp *tcp;
+
+		read(descriptor, buffer, sizeof(buffer));
+		ip = buf2ip(buffer);
+		tcp = buf2tcp(buffer, ip);
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->seq) + 1;
+
+		send_tcp_packet(conn, TCP_ACK);
+		conn->state = TCP_ESTABLISHED;
 
 		send_tcp_packet_data(conn, TCP_ACK, args->size);
 
 		shm_notify(guard);
 		shm_wait(guard);
+
+		memcpy(shm_buffer, shared_memory + 1, args->size);
 
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
@@ -101,29 +95,24 @@ void communicate(int descriptor,
 		conn->seq = ntohl(tcp->ack);
 		conn->ack = ntohl(tcp->seq) + args->size;
 
-		memcpy(shm_buffer, shared_memory + 1, args->size);
+		uint8_t fin_ack_flag = 0;
+		fin_ack_flag |= TCP_FIN | TCP_ACK;
+		send_tcp_packet(conn, fin_ack_flag);
 
 		shm_notify(guard);
 		shm_wait(guard);
+
+		read(descriptor, buffer, sizeof(buffer));
+		ip = buf2ip(buffer);
+		tcp = buf2tcp(buffer, ip);
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->seq) + 1;
+
+		send_tcp_packet(conn, TCP_ACK);
+		conn->state = TCP_CLOSED;
+
+		shm_notify(guard);
 	}
-
-	uint8_t fin_ack_flag = 0;
-	fin_ack_flag |= TCP_FIN | TCP_ACK;
-	send_tcp_packet(conn, fin_ack_flag);
-
-	shm_notify(guard);
-	shm_wait(guard);
-
-	read(descriptor, buffer, sizeof(buffer));
-	ip = buf2ip(buffer);
-	tcp = buf2tcp(buffer, ip);
-	conn->seq = ntohl(tcp->ack);
-	conn->ack = ntohl(tcp->seq) + 1;
-
-	send_tcp_packet(conn, TCP_ACK);
-	conn->state = TCP_CLOSED;
-
-	shm_notify(guard);
 
 	cleanup_tcp(descriptor, shm_buffer);
 }
