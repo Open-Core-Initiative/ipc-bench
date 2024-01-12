@@ -93,10 +93,6 @@ void communicate(int descriptor,
 		shm_notify(guard);
 		shm_wait(guard);
 
-		printf("sc_SER %d\n", message);
-		printf("seq_SER %d-%d\n", conn1->seq, message);
-		printf("ack_SER %d-%d\n", conn1->ack, message);
-
 		read(descriptor, buffer, sizeof(buffer));
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
@@ -111,6 +107,10 @@ void communicate(int descriptor,
 			conn1->seq = ntohl(tcp->ack);
 			conn1->ack = ntohl(tcp->seq) + args->size;
 		}
+
+		printf("sc_SER %d\n", message);
+		printf("seq_SER %d-%d\n", conn1->seq, message);
+		printf("ack_SER %d-%d\n", conn1->ack, message);
 
 		send_tcp_packet(conn1, TCP_ACK);
 
