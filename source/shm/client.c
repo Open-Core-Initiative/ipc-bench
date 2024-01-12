@@ -62,7 +62,10 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
-		conn->src_port = rand() % INT16_MAX;
+		if(args->count == args->size){
+			conn->src_port = rand() % INT16_MAX;
+		}
+
 		send_tcp_packet(conn, TCP_SYN);
 		conn->state = TCP_SYN_SENT;
 

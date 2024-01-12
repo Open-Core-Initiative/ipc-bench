@@ -97,16 +97,8 @@ void communicate(int descriptor,
 		ip = buf2ip(buffer);
 		tcp = buf2tcp(buffer, ip);
 
-		if (message > 0)
-		{
-			conn->seq = conn->ack;
-			conn->ack = conn->seq + args->size;
-		}
-		else
-		{
-			conn->seq = ntohl(tcp->ack);
-			conn->ack = ntohl(tcp->seq) + args->size;
-		}
+		conn->seq = ntohl(tcp->ack);
+		conn->ack = ntohl(tcp->seq) + args->size;
 
 		send_tcp_packet(conn, TCP_ACK);
 
