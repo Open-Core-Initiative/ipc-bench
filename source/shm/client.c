@@ -85,6 +85,10 @@ void communicate(int descriptor,
 
 		memcpy(shm_buffer, shared_memory + 1, args->size);
 
+		printf("sc_CLI %d\n", args->count);
+		printf("seq_CLI %d-%d\n", conn->seq, args->count);
+		printf("ack_CLI %d-%d\n", conn->ack, args->count);
+
 		uint8_t psh_ack_flag = 0;
 		psh_ack_flag |= TCP_PSH | TCP_ACK;
 		send_tcp_packet_data(conn, psh_ack_flag, args->size);
