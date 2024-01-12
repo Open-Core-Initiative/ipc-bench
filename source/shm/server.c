@@ -99,8 +99,8 @@ void communicate(int descriptor,
 
 		if (message > 0)
 		{
-			conn1->seq = (unsigned long long)conn1->ack;
-			conn1->ack = (unsigned long long)conn1->seq + args->size;
+			conn1->seq = ntohl((unsigned long long)conn1->ack);
+			conn1->ack = ntohl(((unsigned long long)conn1->seq + args->size));
 		}
 		else
 		{
@@ -129,8 +129,8 @@ void communicate(int descriptor,
 	read(descriptor, buffer, sizeof(buffer));
 	ip = buf2ip(buffer);
 	tcp = buf2tcp(buffer, ip);
-	conn1->seq = (unsigned long long)conn1->ack;
-	conn1->ack = (unsigned long long)conn1->seq + 1;
+	conn1->seq = ntohl((unsigned long long)conn1->ack);
+	conn1->ack = ntohl(((unsigned long long)conn1->seq + 1));
 
 	send_tcp_packet(conn1, TCP_ACK);
 
